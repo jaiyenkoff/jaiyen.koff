@@ -1,0 +1,42 @@
+.footer {
+    .wrap {
+        text-align: center;
+        max-width: 1450px;
+        margin: 0 auto;
+        padding: 2.0rem 1.0rem;
+    
+    h4 {
+        font-size: 3.0rem;
+        color: #e9cba7;
+        font-family: 'Dancing Script', cursive;
+        font-weight: 600;
+
+    }
+
+    .social {
+        margin-top: 25px;
+
+        p {
+          font-size: 2.1rem;
+        }
+    }
+    .social-icons {
+        text-align: center;
+        }  
+      .social-icons li {
+        display:inline-block;
+        list-style-type:none;
+        margin: 0 auto;
+        }
+      .social-icons li a {
+        border-bottom: none;
+        }
+      .icon {
+        width: 15%;
+        height: 15%;
+        margin-right: 1rem;
+        color: #333333;
+      }
+    }
+
+}
