@@ -22,6 +22,11 @@ const Header = props => {
                                 Join The Party
                             </Link>
                         </li>
+                        <li>
+                            <Link to="/login">
+                                Login
+                            </Link>
+                        </li>
                     </ul>
                 </div>
             </div>

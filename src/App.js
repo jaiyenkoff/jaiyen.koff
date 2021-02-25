@@ -8,7 +8,8 @@ import HomepageLayout from './layouts/HomepageLayout';
 
 // Pages
 import Homepage from './pages/Homepage';
-import Registration from './pages/Registration'
+import Registration from './pages/Registration';
+import Login from './pages/Login';
 
 function App() {
   return (
@@ -22,6 +23,11 @@ function App() {
           <Route path="/jointheparty" render={() => (
             <MainLayout>
               <Registration />
+            </MainLayout>
+           )} />
+          <Route path="/login" render={() => (
+            <MainLayout>
+              <Login />
             </MainLayout>
            )} />
     </Switch>
