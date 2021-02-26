@@ -1,0 +1,24 @@
+    .formWrap {
+        margin: 3rem auto 0;
+    }
+
+
+
+    .formFooter {
+        text-align: center;
+
+        .errors {
+            display: block;
+            width: 100%;
+            ul {
+                margin: 0;
+                padding: 0;
+            }
+        
+            li {
+            text-align: center;
+            text-decoration: none;
+            list-style-type: none;
+            }
+        }
+    }

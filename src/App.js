@@ -3,7 +3,7 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 import { auth, handleUserProfile } from './firebase/utils';
 import './default.scss';
 
-// Layout
+// Layouts
 import MainLayout from './layouts/MainLayout'; 
 import HomepageLayout from './layouts/HomepageLayout';
 
@@ -11,6 +11,7 @@ import HomepageLayout from './layouts/HomepageLayout';
 import Homepage from './pages/Homepage';
 import Registration from './pages/Registration';
 import Login from './pages/Login';
+import Recovery from './pages/Recovery';
 
 const initialState = {
   currentUser: null
@@ -62,15 +63,21 @@ class App extends Component {
               <Homepage />
             </HomepageLayout>
           )} />
-          <Route path="/jointheparty" render={() => (
+          <Route path="/jointheparty" render={() => currentUser ? <Redirect to="/" /> : (
             <MainLayout currentUser={currentUser}>
               <Registration />
             </MainLayout>
            )} />
           <Route path="/login" 
-          render={() => currentUser ? <Redirect to="/" /> :(
+          render={() => currentUser ? <Redirect to="/" /> : (
             <MainLayout currentUser={currentUser}>
               <Login />
+            </MainLayout>
+           )} />
+          <Route path="/recovery" 
+          render={() => (
+            <MainLayout>
+              <Recovery />
             </MainLayout>
            )} />
     </Switch>
