@@ -1,5 +1,5 @@
 /* eslint-disable */ 
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import './styles.scss';
 
 import { auth, handleUserProfile } from './../../firebase/utils';
@@ -17,24 +17,12 @@ const initialState = {
     errors: []
 };
 
-class SignUp extends Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
-          ...initialState
-        };
+const SignUp = props => {
     
-        this.handleChange = this.handleChange.bind(this);
-      }
-    
-      handleChange(e) {
-        const { name, value } = e.target;
-    
-        this.setState({
-          [name]: value
-        });
-      }
+    const [ displayName, setDisplayName ] = useState('');
+    const [ email, setEmail ] = useState('');
+    const [ password, setPassword ] = useState('');
+    const [ confirmPassword, setConfirmPassword ] = useState('');
     
       handleFormSubmit = async event => {
         event.preventDefault();
@@ -64,9 +52,7 @@ class SignUp extends Component {
         }
     
       }
-    
-      render() {
-        const { displayName, email, password, confirmPassword, errors } = this.state;
+  
 
         const configAuthWrapper = {
           headline: 'Sign Up'
@@ -135,6 +121,5 @@ class SignUp extends Component {
             </AuthWrapper>
         );
     }
-}
 
 export default SignUp;
