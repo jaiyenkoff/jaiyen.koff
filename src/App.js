@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import { auth, handleUserProfile } from './firebase/utils';
 import './default.scss';
@@ -17,16 +17,12 @@ import Recovery from './pages/Recovery';
 
 
 
-class App extends Component {
+const App = props => {  
+  const { setCurrentUser, currentUser } = props;
 
-  
-  authListener = null;
-
-  componentDidMount() {
-
-    const { setCurrentUser } = this.props;
-
-      this.authListener = auth.onAuthStateChanged(async userAuth => {
+  useEffect(() => {
+ 
+      const authListener = auth.onAuthStateChanged(async userAuth => {
         if (userAuth) {
           const userRef = await handleUserProfile(userAuth);
           userRef.onSnapshot(snapshot => {
@@ -39,15 +35,11 @@ class App extends Component {
 
        setCurrentUser(userAuth);
      });
-  }
+    return() => {
+      authListener();
+    }
+  }, [])
 
-  componentWillUnmount() {
-      this.authListener();
-  }
-
-  render() { 
-
-    const { currentUser } = this.props;
 
     return (
     <div className="App">
@@ -78,7 +70,7 @@ class App extends Component {
     </div>
   );
 }
-}
+
 
 const mapStateToProps = ({ user }) => ({
   currentUser: user.currentUser

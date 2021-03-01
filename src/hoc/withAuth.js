@@ -1,0 +1,1 @@
+const WithAuth = props => props.children;

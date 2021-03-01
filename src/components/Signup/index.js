@@ -9,30 +9,28 @@ import FormInput from './../forms/FormInput';
 import Button from './../forms/Button';
 import AuthWrapper from './../AuthWrapper'
 
-const initialState = {
-    displayName: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    errors: []
-};
 
 const SignUp = props => {
-    
     const [ displayName, setDisplayName ] = useState('');
     const [ email, setEmail ] = useState('');
     const [ password, setPassword ] = useState('');
     const [ confirmPassword, setConfirmPassword ] = useState('');
+    const [ errors, setErrors ] = useState('');
     
-      handleFormSubmit = async event => {
+    const reset = () => {
+      setDisplayName('');
+      setEmail('');
+      setPassword('');
+      setConfirmPassword('');
+      setErrors([]);
+    }
+
+      const handleFormSubmit = async event => {
         event.preventDefault();
-        const { displayName, email, password, confirmPassword } = this.state;
     
         if (password !== confirmPassword) {
           const err = ['Password Don\'t match. Love'];
-          this.setState({
-            errors: err
-          });
+          setErrors(errors);
           return;
         }
     
@@ -41,11 +39,7 @@ const SignUp = props => {
           const { user } = await auth.createUserWithEmailAndPassword(email, password);
     
           await handleUserProfile(user, { displayName });
-    
-          this.setState({
-            ...initialState
-          });
-    
+          reset();
     
         } catch(err) {
           // console.log(err);
@@ -61,14 +55,14 @@ const SignUp = props => {
         return (
           <AuthWrapper {...configAuthWrapper}>
                 <div className="formWrap">
-                    <form onSubmit={this.handleFormSubmit}>
+                    <form onSubmit={handleFormSubmit}>
                         
                         <FormInput
                             type="text"
                             name="displayName"
                             value={displayName}
                             placeHolder="User Name"
-                            onChange={this.handleChange}
+                            handleChange={e => setDisplayName(e.target.value)}
                         />
                         
                         <FormInput
@@ -76,7 +70,7 @@ const SignUp = props => {
                             name="email"
                             value={email}
                             placeHolder="Email"
-                            onChange={this.handleChange}
+                            handleChange={e => setEmail(e.target.value)}
                         />
 
                         <FormInput
@@ -84,7 +78,7 @@ const SignUp = props => {
                             name="password"
                             value={password}
                             placeHolder="Password"
-                            onChange={this.handleChange}
+                            handleChange={e => setPassword(e.target.value)}
                         />
                         
                         <FormInput
@@ -92,7 +86,7 @@ const SignUp = props => {
                             name="confirmPassword"
                             value={confirmPassword}
                             placeHolder="Confirm Password"
-                            onChange={this.handleChange}
+                            handleChange={e => setConfirmPassword(e.target.value)}
                         />
 
                         <Button type="submit">

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { auth } from './../../firebase/utils';
 import { withRouter } from 'react-router-dom'
 import './styles.scss';
@@ -8,34 +8,17 @@ import AuthWrapper from './../AuthWrapper';
 import FormInput from './../forms/FormInput';
 import Button from './../forms/Button'
 
-const initialState = {
-    email: '',
-    errors: []
-}
 
-class RecoverPassword extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            ...initialState
-        };
+const RecoverPassword = props => {
 
-        this.handleChange = this.handleChange.bind(this);
-    }
+    const [ email, setEmail ] = useState('');
+    const [ errors, setErrors ] = useState([]);
 
-    handleChange(e) {
-        const { name, value } = e.target;
-        this.setState({
-            [name]: value
-        })
-    }
-
-    handleSubmit = async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         
         try {
-            const { email } = this.state;
 
             const config = {
                 url: 'http://localhost:3000/login'
@@ -43,13 +26,11 @@ class RecoverPassword extends Component {
 
             await auth.sendPasswordResetEmail(email, config)
                 .then(() => {
-                    this.props.history.push('/login')
+                    props.history.push('/login')
                 })
                 .catch(() => {
                     const err = ['Email Not Found. Please Try Again']
-                    this.setState({
-                        errors: err
-                    })
+                    setErrors(err);
                 });
         } catch (err) {
             console.log(err);
@@ -57,9 +38,6 @@ class RecoverPassword extends Component {
 
     }
 
-    render() {
-
-        const { email, errors } = this.state;
 
         const configAuthWrapper = {
             headline: 'Recovery Your Password'
@@ -69,13 +47,13 @@ class RecoverPassword extends Component {
             <AuthWrapper {...configAuthWrapper}>
 
                 <div className="formWrap">
-                    <form onSubmit={this.handleSubmit}>
+                    <form onSubmit={handleSubmit}>
                         <FormInput 
                             type="email"
                             name="email"
                             value={email}
                             placeholder="Email"
-                            onChange={this.handleChange}
+                            handleChange={e => setEmail(e.target.value)}
                         />
 
                         <Button type="submit">
@@ -99,6 +77,5 @@ class RecoverPassword extends Component {
             </AuthWrapper>
         );
     }
-}
 
 export default withRouter(RecoverPassword)
