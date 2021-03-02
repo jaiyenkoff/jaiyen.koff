@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { signInUser, signInWithGoogle, signInWithFacebook } from "./../../redux/User/user.actions";
+
 import './styles.scss';
 import { Link,withRouter } from 'react-router-dom'
 
 
-import { auth, signInWithGoogle, signInWithFacebook } from './../../firebase/utils';
+// import { signInWithGoogle, signInWithFacebook } from './../../firebase/utils';
 
 // Components
 import Button from './../forms/Button';
@@ -18,9 +21,22 @@ import { fab, faFacebook, faGoogle } from '@fortawesome/free-brands-svg-icons'
 
 library.add(fab, faFacebook, faGoogle)
 
+const mapState = ({ user }) => ({
+  signInSuccess: user.signInSuccess
+});
+
 const SignIn = props => {
+      const { signInSuccess } = useSelector(mapState)
+      const dispatch = useDispatch();
       const [ email, setEmail ] = useState('');
       const [ password, setPassword ] = useState('');
+
+      useEffect(() => {
+        if (signInSuccess) {
+          resetForm();
+          props.history.push('/')
+        }
+      }, [signInSuccess])
 
       const resetForm = () => {
         setEmail('');
@@ -29,16 +45,15 @@ const SignIn = props => {
 
       const handleSubmit = async e => {
         e.preventDefault();
-    
-        try {
-    
-          await auth.signInWithEmailAndPassword(email, password);
-          resetForm();
-          props.history.push('/')
-    
-        } catch(err) {
-            console.log(err);
-        }
+        dispatch(signInUser({email, password}));
+      }
+
+      const handleGoogleSignIn = () => {
+        dispatch(signInWithGoogle());
+      }
+
+      const handleFacebookSignIn = () => {
+        dispatch(signInWithFacebook());
       }
 
         const configAuthWrapper = {
@@ -71,12 +86,12 @@ const SignIn = props => {
 
                             <div className="socialSignin">
                                 <div className="row">
-                                    <Button onClick={signInWithGoogle}>
+                                    <Button onClick={handleGoogleSignIn}>
                                     <FontAwesomeIcon className="icon" icon={['fab' , 'google']} size="m" /> Log In With Google 
                                     </Button>
                                 </div>
                                 <div className="row">
-                                    <Button onClick={signInWithFacebook}>
+                                    <Button onClick={handleFacebookSignIn}>
                                     <FontAwesomeIcon className="icon" icon={['fab' , 'facebook']} size="m" /> Log In With Facebook 
                                     </Button>
                                 </div>
