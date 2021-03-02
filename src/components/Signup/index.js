@@ -1,5 +1,6 @@
 /* eslint-disable */ 
 import React, { useState } from 'react';
+import { withRouter } from 'react-router-dom';
 import './styles.scss';
 
 import { auth, handleUserProfile } from './../../firebase/utils';
@@ -40,6 +41,8 @@ const SignUp = props => {
     
           await handleUserProfile(user, { displayName });
           reset();
+            props.history.push('/')
+
     
         } catch(err) {
           // console.log(err);
@@ -116,4 +119,4 @@ const SignUp = props => {
         );
     }
 
-export default SignUp;
+export default withRouter   (SignUp);
