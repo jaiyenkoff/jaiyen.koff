@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { signInUser, signInWithGoogle, signInWithFacebook, resetAllAuthForms } from "./../../redux/User/user.actions";
+import { emailSignInStart, signInWithGoogle, signInWithFacebook, resetAllAuthForms } from "./../../redux/User/user.actions";
 
 import './styles.scss';
 import { Link,withRouter } from 'react-router-dom'
@@ -22,30 +22,24 @@ import { fab, faFacebook, faGoogle } from '@fortawesome/free-brands-svg-icons'
 library.add(fab, faFacebook, faGoogle)
 
 const mapState = ({ user }) => ({
-  signInSuccess: user.signInSuccess,
-  signInError: user.signInError
+  currentUser: user.currentUser
 });
 
 const SignIn = props => {
-      const { signInSuccess, signInError } = useSelector(mapState)
+      const { currentUser } = useSelector(mapState)
       const dispatch = useDispatch();
       const [ email, setEmail ] = useState('');
       const [ password, setPassword ] = useState('');
       const [ errors, setErrors ] = useState([]);
 
       useEffect(() => {
-        if (signInSuccess) {
+        if (currentUser) {
           resetForm();
-          dispatch(resetAllAuthForms());
           props.history.push('/');
         }
-      }, [signInSuccess])
+      }, [currentUser])
 
-      useEffect(() => {
-        if (Array.isArray(signInError) && signInError.length > 0) {
-            setErrors(signInError);
-        }
-    }, [signInError]);
+ 
 
       const resetForm = () => {
         setEmail('');
@@ -54,7 +48,7 @@ const SignIn = props => {
 
       const handleSubmit = async e => {
         e.preventDefault();
-        dispatch(signInUser({email, password}));
+        dispatch(emailSignInStart({email, password}));
       }
 
       const handleGoogleSignIn = () => {
@@ -105,24 +99,24 @@ const SignIn = props => {
                                     </Button>
                                 </div>
                             </div>
-                            <div className="errors">
-                    {errors.length > 0 && (
-                        <ul>
-                            {errors.map((err, index) => {
-                                return (
-                                    <li key={index}> 
-                                        {err}
-                                    </li>
-                                )
-                            })}
-                        </ul>
-                    )}
-                    </div>
                             <div className="links">
                               <Link to="/recovery">
                                 Reset Password
                               </Link>
                             </div>
+                            <div className="errors">
+                                {errors.length > 0 && (
+                                <ul>
+                                    {errors.map((err, index) => {
+                                        return (
+                                            <li key={index}> 
+                                                {err}
+                                            </li>
+                                        )
+                                    })}
+                                </ul>
+                                )}
+                          </div>
                         </form>
                     </div>
         </AuthWrapper>
