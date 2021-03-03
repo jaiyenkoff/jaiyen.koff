@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { signInUser, signInWithGoogle, signInWithFacebook } from "./../../redux/User/user.actions";
+import { signInUser, signInWithGoogle, signInWithFacebook, resetAllAuthForms } from "./../../redux/User/user.actions";
 
 import './styles.scss';
 import { Link,withRouter } from 'react-router-dom'
@@ -22,21 +22,30 @@ import { fab, faFacebook, faGoogle } from '@fortawesome/free-brands-svg-icons'
 library.add(fab, faFacebook, faGoogle)
 
 const mapState = ({ user }) => ({
-  signInSuccess: user.signInSuccess
+  signInSuccess: user.signInSuccess,
+  signInError: user.signInError
 });
 
 const SignIn = props => {
-      const { signInSuccess } = useSelector(mapState)
+      const { signInSuccess, signInError } = useSelector(mapState)
       const dispatch = useDispatch();
       const [ email, setEmail ] = useState('');
       const [ password, setPassword ] = useState('');
+      const [ errors, setErrors ] = useState([]);
 
       useEffect(() => {
         if (signInSuccess) {
           resetForm();
-          props.history.push('/')
+          dispatch(resetAllAuthForms());
+          props.history.push('/');
         }
       }, [signInSuccess])
+
+      useEffect(() => {
+        if (Array.isArray(signInError) && signInError.length > 0) {
+            setErrors(signInError);
+        }
+    }, [signInError]);
 
       const resetForm = () => {
         setEmail('');
@@ -96,6 +105,19 @@ const SignIn = props => {
                                     </Button>
                                 </div>
                             </div>
+                            <div className="errors">
+                    {errors.length > 0 && (
+                        <ul>
+                            {errors.map((err, index) => {
+                                return (
+                                    <li key={index}> 
+                                        {err}
+                                    </li>
+                                )
+                            })}
+                        </ul>
+                    )}
+                    </div>
                             <div className="links">
                               <Link to="/recovery">
                                 Reset Password

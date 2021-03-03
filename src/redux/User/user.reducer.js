@@ -21,6 +21,11 @@ const userReducer = (state=INITIAL_STATE, action) => {
                 ...state,
                 signInSuccess: action.payload
             }
+            case userTypes.SIGN_IN_ERROR:
+                return {
+                    ...state,
+                    signInError: action.payload
+                }
         case userTypes.SIGN_UP_ERROR:
             return {
                 ...state,
@@ -40,6 +45,16 @@ const userReducer = (state=INITIAL_STATE, action) => {
             return {
                 ...state,
                 resetPasswordError: action.payload
+            }
+        case userTypes.RESET_AUTH_FORMS:
+            return {
+                ...state,
+                signInSuccess: false,
+                signInError: [],
+                signUpSuccess: false,
+                signUpError: [],
+                resetPasswordSuccess: false,
+                resetPasswordError: []
             }
         default:
             return state;

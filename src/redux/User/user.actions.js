@@ -8,18 +8,30 @@ export const setCurrentUser = user => ({
 
 export const signInUser = ({ email, password }) => async dispatch => {
         try {
-    
-            await auth.signInWithEmailAndPassword(email, password);
-            dispatch({ 
+            await auth.signInWithEmailAndPassword(email, password)
+            .then(() => {
+              dispatch({ 
                 type: userTypes.SIGN_IN_SUCCESS,
                 payload: true
              });
-    
-            } catch(err) {
+            })
+            .catch(() => {
+                const err = ['Email or Password is invalid. Please Try Again']
+                  dispatch({
+                    type: userTypes.SIGN_IN_ERROR,
+                    payload: err
+                  });
+            });
+          } catch(err) {
             console.log(err);
         }
+        return;
 }
 
+export const resetAllAuthForms = () => ({
+  type: userTypes.RESET_AUTH_FORMS
+})
+ 
 export const signUpUser = ({ displayName, email, password, confirmPassword }) => async dispatch => {
     if (password !== confirmPassword) {
           const err = ['Password Don\'t match. Love'];
