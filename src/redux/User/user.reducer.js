@@ -20,6 +20,11 @@ const userReducer = (state=INITIAL_STATE, action) => {
                 ...state,
                 ...INITIAL_STATE
             }
+        case userTypes.RESET_PASSWORD_SUCCESS:
+            return {
+                ...state,
+                resetPasswordSuccess: action.payload
+            }
         case userTypes.USER_ERROR:
             return {
                 ...state,

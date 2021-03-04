@@ -22,11 +22,12 @@ import { fab, faFacebook, faGoogle } from '@fortawesome/free-brands-svg-icons'
 library.add(fab, faFacebook, faGoogle)
 
 const mapState = ({ user }) => ({
-  currentUser: user.currentUser
+  currentUser: user.currentUser,
+  userError: user.userError
 });
 
 const SignIn = props => {
-      const { currentUser } = useSelector(mapState)
+      const { currentUser,userError } = useSelector(mapState)
       const dispatch = useDispatch();
       const [ email, setEmail ] = useState('');
       const [ password, setPassword ] = useState('');
@@ -39,7 +40,11 @@ const SignIn = props => {
         }
       }, [currentUser])
 
- 
+      useEffect(() => {
+        if (Array.isArray(userError) && userError.length > 0) {
+            setErrors(userError);
+        }
+    }, [userError]);
 
       const resetForm = () => {
         setEmail('');
