@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { withRouter } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import './styles.scss';
 
-import { resetPasswordStart, userError } from './../../redux/User/user.actions';
+import { resetPasswordStart, resetUserState } from './../../redux/User/user.actions';
 
 // Components
 import AuthWrapper from './../AuthWrapper';
@@ -17,14 +17,16 @@ const mapState = ({ user }) => ({
 
 
 const RecoverPassword = props => {
-    const { resetPasswordSuccess, userError } = useSelector(mapState)
     const dispatch = useDispatch();
+    const history = useHistory();
+    const { resetPasswordSuccess, userError } = useSelector(mapState)
     const [ email, setEmail ] = useState('');
     const [ errors, setErrors ] = useState([]);
 
     useEffect(() => {
         if (resetPasswordSuccess) {
-            props.history.push('/login')
+            dispatch(resetUserState());
+            history.push('/login')
         }
     }, [resetPasswordSuccess]);
 
@@ -79,4 +81,4 @@ const RecoverPassword = props => {
         );
     }
 
-export default withRouter(RecoverPassword)
+export default RecoverPassword

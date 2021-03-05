@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { emailSignInStart, signInWithGoogle, signInWithFacebook, resetAllAuthForms } from "./../../redux/User/user.actions";
+import { emailSignInStart, googleSignInStart, facebookSignInStart} from "./../../redux/User/user.actions";
 
 import './styles.scss';
-import { Link,withRouter } from 'react-router-dom'
+import { Link,useHistory } from 'react-router-dom'
 
 
-// import { signInWithGoogle, signInWithFacebook } from './../../firebase/utils';
+
 
 // Components
 import Button from './../forms/Button';
@@ -22,13 +22,13 @@ import { fab, faFacebook, faGoogle } from '@fortawesome/free-brands-svg-icons'
 library.add(fab, faFacebook, faGoogle)
 
 const mapState = ({ user }) => ({
-  currentUser: user.currentUser,
-  userError: user.userError
+  currentUser: user.currentUser
 });
 
 const SignIn = props => {
-      const { currentUser,userError } = useSelector(mapState)
       const dispatch = useDispatch();
+      const history = useHistory();
+      const { currentUser } = useSelector(mapState)
       const [ email, setEmail ] = useState('');
       const [ password, setPassword ] = useState('');
       const [ errors, setErrors ] = useState([]);
@@ -36,15 +36,10 @@ const SignIn = props => {
       useEffect(() => {
         if (currentUser) {
           resetForm();
-          props.history.push('/');
+          history.push('/');
         }
       }, [currentUser])
 
-      useEffect(() => {
-        if (Array.isArray(userError) && userError.length > 0) {
-            setErrors(userError);
-        }
-    }, [userError]);
 
       const resetForm = () => {
         setEmail('');
@@ -57,11 +52,11 @@ const SignIn = props => {
       }
 
       const handleGoogleSignIn = () => {
-        dispatch(signInWithGoogle());
+        dispatch(googleSignInStart());
       }
 
       const handleFacebookSignIn = () => {
-        dispatch(signInWithFacebook());
+        dispatch(facebookSignInStart());
       }
 
         const configAuthWrapper = {
@@ -91,8 +86,8 @@ const SignIn = props => {
                             <Button type="submit">
                                 Log In
                             </Button>
-
-                            <div className="socialSignin">
+                        </form>
+                        <div className="socialSignin">
                                 <div className="row">
                                     <Button onClick={handleGoogleSignIn}>
                                     <FontAwesomeIcon className="icon" icon={['fab' , 'google']} size="m" /> Log In With Google 
@@ -109,23 +104,9 @@ const SignIn = props => {
                                 Reset Password
                               </Link>
                             </div>
-                            <div className="errors">
-                                {errors.length > 0 && (
-                                <ul>
-                                    {errors.map((err, index) => {
-                                        return (
-                                            <li key={index}> 
-                                                {err}
-                                            </li>
-                                        )
-                                    })}
-                                </ul>
-                                )}
-                          </div>
-                        </form>
                     </div>
         </AuthWrapper>
         );
     }
 
-export default withRouter(SignIn)
+export default SignIn

@@ -1,5 +1,4 @@
 import userTypes from './user.types';
-import { auth, handleUserProfile, GoogleProvider, FacebookProvider } from "./../../firebase/utils";
 
 
 export const emailSignInStart = userCredentials => ({
@@ -47,56 +46,14 @@ export const resetPasswordSuccess = () => ({
   payload: true
 })
 
-
-
-export const setCurrentUser = user => ({
-    type: userTypes.SET_CURRENT_USER,
-    payload: user
+export const resetUserState = () => ({
+  type: userTypes.RESET_USER_STATE
 })
 
-// export const signInUser = ({ email, password }) => async dispatch => {
-// }
-
-export const resetAllAuthForms = () => ({
-  type: userTypes.RESET_AUTH_FORMS
+export const googleSignInStart = () => ({
+  type: userTypes.GOOGLE_SIGN_IN_START
 })
- 
-export const signUpUser = ({ displayName, email, password, confirmPassword }) => async dispatch => {
-    
-}
 
-export const resetPassword = ({ email }) => async dispatch => {
-         
-}
-
-export const signInWithGoogle = () => async dispatch => {
-
-  try {
-    await auth.signInWithPopup(GoogleProvider)
-      .then(() => {
-        dispatch({ 
-          type: userTypes.SIGN_IN_SUCCESS,
-          payload: true
-       });
-      });
-  } catch (err) {
-    console.log(err);
-  }
-  
-};
-
-
-export const signInWithFacebook = () => async dispatch => {
-
-  try {
-    await auth.signInWithPopup(FacebookProvider)
-      .then(() => {
-        dispatch({ 
-          type: userTypes.SIGN_IN_SUCCESS,
-          payload: true
-       });
-      });
-  } catch (err) {
-    console.log(err);
-  }
-};
+export const facebookSignInStart = () => ({
+  type: userTypes.FACEBOOK_SIGN_IN_START
+})
