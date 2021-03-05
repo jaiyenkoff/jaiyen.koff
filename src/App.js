@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux'
 
 // HOC
 import WithAuth from './hoc/withAuth';
+import WithAdminAuth from './hoc/withAdminAuth';
 
 // Layouts
 import MainLayout from './layouts/MainLayout'; 
@@ -17,6 +18,7 @@ import Registration from './pages/Registration';
 import Login from './pages/Login';
 import Recovery from './pages/Recovery';
 import Dashboard from './pages/Dashboard';
+import Admin from './pages/Admin';
 
 
 
@@ -60,6 +62,14 @@ const App = props => {
               <Dashboard />
             </MainLayout>
             </WithAuth>
+           )} />
+          <Route path="/adminportal" 
+          render={() => (
+            <WithAdminAuth>
+            <MainLayout>
+              <Admin />
+            </MainLayout>
+            </WithAdminAuth>
            )} />
     </Switch>
     </div>
