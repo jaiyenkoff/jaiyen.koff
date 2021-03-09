@@ -1,0 +1,65 @@
+.admin {
+    padding: 0 10px;
+  
+    .wrap {
+      display: inline-block;
+      width: 100%;
+      padding: 0;
+      margin: 0 auto;
+
+      .menuNav {
+      display: inline-block;
+      line-height: 1;
+      width: 25%;
+      margin: 0 20px;
+      border: black solid 1px;
+      border-radius: 5px;
+      padding: 100px 15px;
+
+      .linkHeader {
+      display: inline-block;
+      margin: 0 auto;
+      font-size: 1.6rem;
+      width: 100%;
+      padding: 10px;
+      background-color: black;
+      color: white;
+      text-align: center;
+      }
+
+      .linkDetails {
+      display: inline-block;
+      margin: 0 auto;
+      font-size: 1.4rem;
+      width: 100%;
+      padding: 10px;
+      color: black;
+      text-align: center;
+      }
+
+      .material-icons{
+        display: inline-block;
+        margin: 0 auto;
+        width: 100%;
+        font-size: 72px; 
+        text-align: center;
+        color: black;
+      }
+
+     }
+  
+      ul, li {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+      }
+  
+      ul {
+        li {
+          display: inline-block;
+  
+        }
+      }
+  
+    }
+  } 

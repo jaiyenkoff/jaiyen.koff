@@ -2,7 +2,9 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 import { useSelector, useDispatch } from "react-redux";
-import { signOutUserStart } from './../../redux/User/user.actions'
+import { signOutUserStart } from './../../redux/User/user.actions';
+
+
 
 import './styles.scss'
 
@@ -16,6 +18,7 @@ const mapState = ({ user }) => ({
 const Header = props => {
     const { currentUser } = useSelector(mapState);
     const dispatch = useDispatch();
+
 
     const signOut = () => {
         dispatch(signOutUserStart());
@@ -31,7 +34,7 @@ const Header = props => {
                 </div>
                 <div className="callToAction">
 
-                    {currentUser && (
+                    {currentUser &&(
                         <ul>
                             <li>
                                 <Link to="/dashboard">

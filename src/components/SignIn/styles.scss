@@ -1,8 +1,27 @@
+.signInButton {
+    display: inline-block;
+    width: 100%;
+    margin: 1.5rem auto;
+    padding: 1rem 0;
+    background: #e9cba7;
+    color: #333333;
+    line-height: 1;
+    text-transform: uppercase;
+    font-size: 1.8rem;
+    border: 0;
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+}
 .socialSignin {
             margin: .5rem auto 0;
 
             .row {
                 margin: 1rem auto;
+
+                Button {
+                    background-color: rgba(0,0,0,0);
+                }
             }
             .icon {
                 margin: 0 1rem;

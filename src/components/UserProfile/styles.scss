@@ -1,0 +1,42 @@
+.userProfile {
+    display: block;
+    width: 100%;
+    margin: 3rem auto 1rem;
+  
+    ul, li {
+      margin: 0;
+      padding: 0;
+      list-style-type: none;
+    }
+  
+    ul {
+      li {
+        display: block;
+        width: 100%;
+  
+        .icon {
+          display: block;
+          width: 5.0rem;
+          margin: 0 auto;
+  
+          .material-icons{
+            display: inline-block;
+            margin: 0 auto;
+            width: 100%;
+            font-size: 48px; 
+            text-align: center;
+          }
+        }
+  
+        .displayName {
+          display: block;
+          width: 100%;
+          text-align: center;
+          margin: 1rem auto;
+          font-size: 1.8rem;
+          line-height: 1;
+          text-transform: uppercase;
+        }
+      }
+    }
+  } 
