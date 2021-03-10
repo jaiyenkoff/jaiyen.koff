@@ -1,24 +1,33 @@
-    .formWrap {
-        margin: 3rem auto 0;
+.signUpButton {
+    display: inline-block;
+    width: 100%;
+    margin: 1.5rem auto;
+    padding: 1rem 0;
+    background: #e9cba7;
+    color: #333333;
+    line-height: 1;
+    text-transform: uppercase;
+    font-size: 1.8rem;
+    border: 0;
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+}
+
+.links {
+    display: block;
+    width: 100%;
+    margin: 1.5rem auto 0;
+    text-align: center;
+
+    a {
+        color: #333333;
     }
+}
 
-
-
-    .formFooter {
-        text-align: center;
-
-        .errors {
-            display: block;
-            width: 100%;
-            ul {
-                margin: 0;
-                padding: 0;
-            }
-        
-            li {
-            text-align: center;
-            text-decoration: none;
-            list-style-type: none;
-            }
-        }
-    }
+.formFooter {
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin: 1.5rem auto;
+}

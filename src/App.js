@@ -23,6 +23,7 @@ import Login from './pages/Login';
 import Recovery from './pages/Recovery';
 import Dashboard from './pages/Dashboard';
 import Admin from './pages/Admin';
+import ManageProduct from './pages/Admin/ManageProduct';
 
 
 
@@ -70,9 +71,13 @@ const App = props => {
           <Route path="/adminportal" 
           render={() => (
             <WithAdminAuth>
-            <AdminLayout>
               <Admin />
-            </AdminLayout>
+            </WithAdminAuth>
+           )} />
+          <Route path="/adminportal:manageproduct" 
+          render={() => (
+            <WithAdminAuth>
+              <ManageProduct />
             </WithAdminAuth>
            )} />
     </Switch>

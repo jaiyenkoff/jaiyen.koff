@@ -1,0 +1,16 @@
+.listitems {
+    text-transform: uppercase;
+    a {
+        font-size: 1.8rem;
+        line-height: 1;
+        color: black;
+        text-decoration: none;
+        text-transform: uppercase;
+    }
+    a:hover {
+        color: #e9cba7;
+    }
+    a:active{
+        color: #e9cba7;
+    }
+}

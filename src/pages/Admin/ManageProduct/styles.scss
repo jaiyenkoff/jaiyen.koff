@@ -1,11 +1,9 @@
-.manageProduct {
-    padding: 0 10px;
-  
-    .callToActions {
+      .callToActions {
       display: inline-block;
       width: 100%;
       padding: 0;
       margin: 0 auto;
+      text-align: left;
   
       ul, li {
         margin: 0;
@@ -21,4 +19,7 @@
       }
   
     }
-  } 
+
+    Button {
+      font-size: 1.4rem;
+    }

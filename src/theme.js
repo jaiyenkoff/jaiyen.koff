@@ -19,7 +19,10 @@ const theme = createMuiTheme({
     },
   },
   typography: {
-    fontFamily: 'Playfair Display',
+    fontFamily: [
+    'Playfair Display',
+    'Roboto',
+    ].join(','),
     fontSize: '16px',
   },
 });
