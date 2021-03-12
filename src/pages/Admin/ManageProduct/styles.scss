@@ -20,6 +20,53 @@
   
     }
 
-    Button {
+
+    .modalButton,
+    .imgUploader {
+      display: block;
+      Button {
       font-size: 1.4rem;
+      color: black;
+      font-weight: 400;
+      cursor: pointer;
+      width: 100%;
+      text-align: center;
+    }
+    }
+
+
+    .imgUploader {
+      .imgPreview {
+        display: inline-block;
+        width: 100%;
+        margin: 1rem auto;
+        height: 100%;
+        text-align: center;
+        line-height: 1;
+        img {
+          width: 200px;
+          transition: all .4s ease-in-out;
+          -webkit-transition: all .4s ease-in-out;
+          -moz-transition: all .4s ease-in-out;
+        }
+      }
+    }
+
+    .progressBar {
+      display: block;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+
+
+    .currentProductsTable {
+      display: block;
+      box-sizing: border-box;
+      margin: 1rem auto;
+      text-align: center;
+
+      .previewImg {
+        width: 300px;
+      }
     }

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Modal from './../../../components/Modal';
 import FormInput from './../../../components/forms/FormInput';
 import FormSelect from './../../../components/forms/FormSelect';
 import FormUpload from './../../../components/forms/FormUpload';
 import Button from './../../../components/forms/Button';
-import { addProductStart } from './../../../redux/Products/products.actions';
+import { addProductStart, fetchProductsStart, deleteProductStart, editProductStart } from './../../../redux/Products/products.actions';
 import { storage } from './../../../firebase/utils';
 
 import './styles.scss';
@@ -26,7 +26,7 @@ import Badge from '@material-ui/core/Badge';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import Link from '@material-ui/core/Link';
+import TableContainer from '@material-ui/core/TableContainer';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
@@ -34,10 +34,17 @@ import MainListItems from './../UI/listItems';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 import AddIcon from '@material-ui/icons/Add';
-
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { useTheme } from '@material-ui/core/styles';
+import Title from './../UI/Title';
+import DeleteIcon from '@material-ui/icons/Delete';
+import { handleFetchProducts } from '../../../redux/Products/products.helpers';
 
 const drawerWidth = 240;
 
@@ -117,23 +124,42 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     margin: '0 auto',
   },
+  dialog: {
+    height: '100vh',
+    width: '1000',
+  },
 }));
 
+const mapState = ({ productsData }) => ({
+  products: productsData.products
+})
+
 const ManageProduct = props => {
-  const [products, setProducts] = useState([]);
+  const { products } = useSelector(mapState);
   const [hideModal, setHideModal] = useState(true);
   const [image, setImage] = useState(null);
   const [productCategory, setProductCategory] = useState('to-go');
   const [productName, setProductName] = useState('');
-  const [productThumbnail, setProductThumbnail] = useState('');
+  const [productStock, setProductStock] = useState(0);
   const [productThumbnailUrl, setProductThumbnailUrl] = useState('');
   const [productPrice, setProductPrice] = useState(0);
-
+  const [progress, setProgress] = useState(0);
   const dispatch = useDispatch();
+
   const classes = useStyles();
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
+  
+  useEffect(() => {
+    dispatch(
+      fetchProductsStart()
+    )
+  }, []);
 
   const [open, setOpen] = useState(true);
   const [popup, setPopup] = useState(false);
+  const [editor, setEditor] = useState(false);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -147,17 +173,19 @@ const ManageProduct = props => {
   };
 
   const handleCloseDialog = () => {
-    setPopup(false);
+    resetForm();
   };
   
 
-  const toggleModal = () => setHideModal(!hideModal);
-
-  const configModal = {
-    hideModal,
-    toggleModal
-  };
-
+  const resetForm = () => {
+    setProductCategory('to-go');
+    setProductName('');
+    setProductThumbnailUrl('');
+    setProductStock(0);
+    setProductPrice(0);
+    setPopup(false);
+    setProgress('');
+  }
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -166,11 +194,26 @@ const ManageProduct = props => {
       addProductStart({
         productCategory,
         productName,
-        productThumbnail,
-        productPrice
+        productThumbnailUrl,
+        productPrice,
+        productStock
       })
     );
+    resetForm();
   };
+
+  const handleEditSubmit = e => {
+	  e.preventDefault();
+	  dispatch(
+		editProductStart({
+		  productCategory,
+		  productName,
+		  productThumbnailUrl,
+		  productPrice,
+		  productStock
+		})
+	  );
+  }
 
   const handleImgChange = e => {
     if (e.target.files[0]) {
@@ -182,7 +225,12 @@ const ManageProduct = props => {
     const uploadTask = storage.ref(`images/${image.name}`).put(image);
     uploadTask.on(
       "state_changed",
-      snapshot => {},
+      snapshot => {
+        const progress = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
+        setProgress(progress);
+      },
       error => {
         console.log(error);
       },
@@ -194,11 +242,20 @@ const ManageProduct = props => {
         .then( productThumbnailUrl => {
           setProductThumbnailUrl(productThumbnailUrl);
         })
+      const productThumbnailUrl = () => {
+        if (!productThumbnailUrl){
+          return null;
+        }
+        else {
+          return;
+        }
+      }
       }
     )
   };
 
   console.log("image: ", image);
+
   
   return (
     <div className={classes.root}>
@@ -257,11 +314,11 @@ const ManageProduct = props => {
       </div>
             </Grid>
       <Grid item xs={12} md={8} lg={9}>
-      <Dialog open={popup} onClose={handleCloseDialog} aria-labelledby="form-dialog-title">
+      <Dialog className={classes.dialog} open={popup} onClose={handleCloseDialog} aria-labelledby="form-dialog-title" Fade fullScreen={fullScreen}> 
         <DialogContent>
         <div className="addNewProductForm">
           <form onSubmit={handleSubmit}>
-
+            
             <h2>
               Add new product
             </h2>
@@ -279,6 +336,7 @@ const ManageProduct = props => {
             />
 
             <FormInput
+              required
               label="Name"
               type="text"
               value={productName}
@@ -287,35 +345,46 @@ const ManageProduct = props => {
 
           <div className="imgUploader">
             <FormInput
+              label="Product Image"
               accept="image/*"
               type="file"
               onChange={handleImgChange}
+              class="custom"
               />
-            <Button type="button" name="imgUpload" onClick={handleUpload}>Upload</Button>
-            {productThumbnailUrl}
+            <Button disabled={!image} type="button" name="imgUpload" onClick={handleUpload}>Upload</Button>
+            <progress className="progressBar" value={progress} max="100" />
+            <div className="imgPreview">
+            <img src={productThumbnailUrl} />
+            </div>
           </div>
               
-            {/* <FormInput
-              label="Main image URL"
-              type="url"
-              value={productThumbnail}
-              handleChange={e => setProductThumbnail(e.target.value)}
-            /> */}
+         
 
             <FormInput
+              required
               label="Price"
               type="number"
               min="0.00"
               max="10000.00"
-              step="0.01"
+              step="1"
               value={productPrice}
               handleChange={e => setProductPrice(e.target.value)}
             />
-            <DialogActions>
+            <FormInput
+              required
+              label="Stock"
+              type="number"
+              min="0"
+              max="10000"
+              step="1"
+              value={productStock}
+              handleChange={e => setProductStock(e.target.value)}
+            />
+            <DialogActions className="modalButton">
               <Button type="reset" onClick={handleCloseDialog} color="primary">
                 Cancel
               </Button>
-              <Button onClick={handleCloseDialog} name="formSubmit" type="submit">
+              <Button name="formSubmit" type="submit">
                 Add new product
               </Button>
             </DialogActions>
@@ -323,6 +392,66 @@ const ManageProduct = props => {
         </div>
         </DialogContent>
       </Dialog>
+      </Grid>
+      <Grid item xs={12}>
+      <Title>Product Management</Title>
+	  <div className="currentProductsTable">
+    <TableContainer component={'div'}>
+        <Table stickyHeader={true} size={'small'}>
+            <TableHead>
+              <TableRow>
+                <TableCell align="center">
+                  Preview
+                </TableCell>
+                <TableCell align="center">
+                  Product
+                </TableCell>  
+                <TableCell align="center">
+                  Sell Price
+                </TableCell> 
+                <TableCell align="center">
+                  Stock
+                </TableCell>   
+				<TableCell align="center">
+                  Remove
+                </TableCell>     
+              </TableRow>  
+            </TableHead>   
+            <TableBody>
+            {products.map((product, index) => {
+                    const {
+                      productName,
+                      productThumbnailUrl,
+                      productPrice,
+                      productStock,
+					  documentID
+                    } = product
+                    return (
+                      <TableRow key={index}>
+						  <TableCell align="center">
+							  <img className="previewImg" src={productThumbnailUrl} />
+						  </TableCell>
+						  <TableCell align="center">
+							  私は <Box component="span" >{productName}</Box> です。
+						  </TableCell>
+						  <TableCell align="center">
+							  ฿{productPrice}
+						  </TableCell>
+						  <TableCell align="center">
+							  {productStock}
+						  </TableCell>
+						  <TableCell align="center">
+							  <Button onClick={() => dispatch(deleteProductStart(documentID)) }>
+							  <DeleteIcon />
+							  </Button>
+						  </TableCell>
+            </TableRow>
+                    )
+                  })}
+            </TableBody>         
+        </Table>
+        </TableContainer>
+		</div>
       </Grid>
       </Grid>
       </Paper>

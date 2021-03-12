@@ -50,7 +50,7 @@ const MainListItems = () => {
       <ListItemIcon>
         <ListAltIcon />
       </ListItemIcon>
-      <ListItemText primary="Invetory" />
+      <ListItemText primary="Inventory" />
     </ListItem>
     <ListItem button>
       <ListItemIcon>
