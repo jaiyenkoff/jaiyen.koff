@@ -1,3 +1,7 @@
+      .manageProduct {
+        width: 100%;
+      }
+      
       .callToActions {
       display: inline-block;
       width: 100%;
@@ -59,14 +63,6 @@
     }
 
 
-
-    .currentProductsTable {
-      display: block;
-      box-sizing: border-box;
-      margin: 1rem auto;
-      text-align: center;
-
       .previewImg {
-        width: 300px;
+        width: 15%;
       }
-    }

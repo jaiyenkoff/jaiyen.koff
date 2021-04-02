@@ -38,7 +38,7 @@ const MainListItems = () => {
       <ListItemText primary="Admin Portal" />
     </ListItem>
     </Link>
-    <Link to="/adminportal:manageproduct">
+    <Link to="/manageproduct">
     <ListItem button>
       <ListItemIcon>
         <FreeBreakfastIcon />

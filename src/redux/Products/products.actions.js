@@ -19,7 +19,7 @@ export const deleteProductStart = productID => ({
     payload: productID
 })
 
-export const editProductStart = productData => ({
+export const editProductStart = productID => ({
     type: productsTypes.EDIT_PRODUCT_START,
-    payload: productData
+    payload: productID
 })

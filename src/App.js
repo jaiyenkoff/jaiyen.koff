@@ -24,6 +24,7 @@ import Recovery from './pages/Recovery';
 import Dashboard from './pages/Dashboard';
 import Admin from './pages/Admin';
 import ManageProduct from './pages/Admin/ManageProduct';
+import Product from './pages/Product';
 
 
 
@@ -60,6 +61,12 @@ const App = props => {
               <Recovery />
             </MainLayout>
            )} />
+          <Route path="/products" 
+          render={() => (
+            <MainLayout>
+              <Product />
+            </MainLayout>
+           )} />
           <Route path="/dashboard" 
           render={() => (
             <WithAuth>
@@ -71,13 +78,17 @@ const App = props => {
           <Route path="/adminportal" 
           render={() => (
             <WithAdminAuth>
+              <AdminLayout>
               <Admin />
+              </AdminLayout>
             </WithAdminAuth>
            )} />
-          <Route path="/adminportal:manageproduct" 
+          <Route path="/manageproduct" 
           render={() => (
             <WithAdminAuth>
+              <AdminLayout>
               <ManageProduct />
+              </AdminLayout>
             </WithAdminAuth>
            )} />
     </Switch>

@@ -69,21 +69,9 @@ export function* onDeleteProductStart() {
 }
 
 
-export function* editProduct({ payload :{
-    productCategory,
-    productName,
-    productThumbnailUrl,
-    productPrice,
-    productStock
-}}) {
+export function* editProduct({ payload }) {
     try {
-        yield handleEditProduct({
-            productCategory,
-            productName,
-            productThumbnailUrl,
-            productPrice,
-            productStock
-        });
+        yield handleEditProduct(payload);
         yield put(
             fetchProductsStart()
         );

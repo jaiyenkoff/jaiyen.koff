@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
-import Modal from './../../../components/Modal';
 import FormInput from './../../../components/forms/FormInput';
 import FormSelect from './../../../components/forms/FormSelect';
-import FormUpload from './../../../components/forms/FormUpload';
 import Button from './../../../components/forms/Button';
 import { addProductStart, fetchProductsStart, deleteProductStart, editProductStart } from './../../../redux/Products/products.actions';
 import { storage } from './../../../firebase/utils';
@@ -11,26 +9,13 @@ import { storage } from './../../../firebase/utils';
 import './styles.scss';
 
 // Material Ui
-import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Drawer from '@material-ui/core/Drawer';
 import Box from '@material-ui/core/Box';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import Badge from '@material-ui/core/Badge';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import TableContainer from '@material-ui/core/TableContainer';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import MainListItems from './../UI/listItems';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -109,8 +94,7 @@ const useStyles = makeStyles((theme) => ({
   appBarSpacer: theme.mixins.toolbar,
   content: {
     flexGrow: 1,
-    width: '100vh',
-    height: '100vh',
+    width: '1',
     overflow: 'auto',
   },
   container: {
@@ -136,11 +120,9 @@ const mapState = ({ productsData }) => ({
 
 const ManageProduct = props => {
   const { products } = useSelector(mapState);
-  const [hideModal, setHideModal] = useState(true);
   const [image, setImage] = useState(null);
   const [productCategory, setProductCategory] = useState('to-go');
   const [productName, setProductName] = useState('');
-  const [productStock, setProductStock] = useState(0);
   const [productThumbnailUrl, setProductThumbnailUrl] = useState('');
   const [productPrice, setProductPrice] = useState(0);
   const [progress, setProgress] = useState(0);
@@ -157,16 +139,11 @@ const ManageProduct = props => {
     )
   }, []);
 
-  const [open, setOpen] = useState(true);
+
   const [popup, setPopup] = useState(false);
   const [editor, setEditor] = useState(false);
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
+
 
   const handleDialogOpen = () => {
     setPopup(true);
@@ -181,7 +158,6 @@ const ManageProduct = props => {
     setProductCategory('to-go');
     setProductName('');
     setProductThumbnailUrl('');
-    setProductStock(0);
     setProductPrice(0);
     setPopup(false);
     setProgress('');
@@ -195,23 +171,17 @@ const ManageProduct = props => {
         productCategory,
         productName,
         productThumbnailUrl,
-        productPrice,
-        productStock
+        productPrice
       })
     );
     resetForm();
   };
 
+
   const handleEditSubmit = e => {
 	  e.preventDefault();
 	  dispatch(
-		editProductStart({
-		  productCategory,
-		  productName,
-		  productThumbnailUrl,
-		  productPrice,
-		  productStock
-		})
+		editProductStart()
 	  );
   }
 
@@ -260,43 +230,6 @@ const ManageProduct = props => {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
-        <Toolbar className={classes.toolbar}>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Admin Portal
-          </Typography>
-          <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        variant="permanent"
-        classes={{
-          paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
-        }}
-        open={open}
-      >
-        <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
-            <ChevronLeftIcon />
-          </IconButton>
-        </div>
-        <Divider />
-        <List><MainListItems /></List>
-        <Divider />
-      </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="false" className={classes.container}>
@@ -370,16 +303,7 @@ const ManageProduct = props => {
               value={productPrice}
               handleChange={e => setProductPrice(e.target.value)}
             />
-            <FormInput
-              required
-              label="Stock"
-              type="number"
-              min="0"
-              max="10000"
-              step="1"
-              value={productStock}
-              handleChange={e => setProductStock(e.target.value)}
-            />
+  
             <DialogActions className="modalButton">
               <Button type="reset" onClick={handleCloseDialog} color="primary">
                 Cancel
@@ -395,9 +319,8 @@ const ManageProduct = props => {
       </Grid>
       <Grid item xs={12}>
       <Title>Product Management</Title>
-	  <div className="currentProductsTable">
     <TableContainer component={'div'}>
-        <Table stickyHeader={true} size={'small'}>
+        <Table stickyHeader={true} size={'medium'}>
             <TableHead>
               <TableRow>
                 <TableCell align="center">
@@ -409,10 +332,7 @@ const ManageProduct = props => {
                 <TableCell align="center">
                   Sell Price
                 </TableCell> 
-                <TableCell align="center">
-                  Stock
-                </TableCell>   
-				<TableCell align="center">
+				        <TableCell align="center">
                   Remove
                 </TableCell>     
               </TableRow>  
@@ -423,12 +343,11 @@ const ManageProduct = props => {
                       productName,
                       productThumbnailUrl,
                       productPrice,
-                      productStock,
-					  documentID
+					            documentID
                     } = product
                     return (
-                      <TableRow key={index}>
-						  <TableCell align="center">
+              <TableRow key={index} hover>
+						  <TableCell align="center" className="currentImg" >
 							  <img className="previewImg" src={productThumbnailUrl} />
 						  </TableCell>
 						  <TableCell align="center">
@@ -436,9 +355,6 @@ const ManageProduct = props => {
 						  </TableCell>
 						  <TableCell align="center">
 							  ฿{productPrice}
-						  </TableCell>
-						  <TableCell align="center">
-							  {productStock}
 						  </TableCell>
 						  <TableCell align="center">
 							  <Button onClick={() => dispatch(deleteProductStart(documentID)) }>
@@ -451,7 +367,6 @@ const ManageProduct = props => {
             </TableBody>         
         </Table>
         </TableContainer>
-		</div>
       </Grid>
       </Grid>
       </Paper>

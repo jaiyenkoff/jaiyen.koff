@@ -50,11 +50,12 @@ export const handleDeleteProduct = documentID => {
     })
 }
 
-export const handleEditProduct = product => {
+export const handleEditProduct = documentID => {
     return new Promise((resolve, reject) => {
-        let ref = firestore.collection('products').doc(product)
-        ref
-        .set(product)
+        firestore
+        .collection('products')
+        .doc(documentID)
+        .update()
         .then(() => {
             resolve();
         })
